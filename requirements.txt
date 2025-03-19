@@ -8,4 +8,6 @@ scipy
 streamlit 
 python-multipart
 fastapi 
-uvicorn
+uvicorn 
+pillow
+httpx  
