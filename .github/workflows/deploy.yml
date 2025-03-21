@@ -59,15 +59,3 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/food_contamination_frontend:latest -f frontend.Dockerfile .
           docker push ${{ secrets.DOCKER_USERNAME }}/food_contamination_frontend:latest
 
-  deploy:
-    needs: build-and-push  # Deploy only if Docker images are pushed
-    runs-on: ubuntu-latest
-
-    steps:
-      # Step 9: Pull and Run Containers
-      - name: Deploy Application
-        run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/food_contamination_backend:latest
-          docker pull ${{ secrets.DOCKER_USERNAME }}/food_contamination_frontend:latest
-          docker-compose up -d
-

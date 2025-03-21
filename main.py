@@ -8,18 +8,16 @@ from PIL import Image
 
 app = FastAPI()
 
-# Load the model
 model = load_model('model.h5')
 
 img_height, img_width = 224, 224
 
-# Function to preprocess image
 def preprocess_image(image_bytes):
     img = Image.open(BytesIO(image_bytes))
     img = img.resize((img_height, img_width))
     img_array = image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
-    img_array /= 255.0  # Rescale
+    img_array /= 255.0  
     return img_array
 
 @app.post("/predict/")
