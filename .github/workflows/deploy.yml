@@ -1,4 +1,4 @@
-name: CI for FastAPI App
+name: CI/CD for FastAPI & Streamlit App
 
 on:
   push:
@@ -10,24 +10,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
-      - name: Checkout code
+      # Step 1: Checkout Repository
+      - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Python
+      # Step 2: Set up Python Environment
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
           python-version: '3.9'
 
-      # Step 3: Install dependencies
+      # Step 3: Install Dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       # Step 4: Run Tests
-      - name: Run tests
+      - name: Run Tests
         run: |
           python -m unittest discover -s tests  # Runs all test cases inside `tests/`
 
@@ -36,8 +36,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 5: Checkout the repository
-      - name: Checkout code
+      # Step 5: Checkout Repository
+      - name: Checkout Code
         uses: actions/checkout@v3
 
       # Step 6: Log in to Docker Hub
@@ -47,9 +47,27 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Step 7: Build and push the Docker image
-      - name: Build and push Docker image
+      # Step 7: Build and Push Backend Image
+      - name: Build and Push Backend
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/fastapi-app11:latest .
-          docker push ${{ secrets.DOCKER_USERNAME }}/fastapi-app11:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/food_contamination_backend:latest -f backend.Dockerfile .
+          docker push ${{ secrets.DOCKER_USERNAME }}/food_contamination_backend:latest
+
+      # Step 8: Build and Push Frontend Image
+      - name: Build and Push Frontend
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/food_contamination_frontend:latest -f frontend.Dockerfile .
+          docker push ${{ secrets.DOCKER_USERNAME }}/food_contamination_frontend:latest
+
+  deploy:
+    needs: build-and-push  # Deploy only if Docker images are pushed
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 9: Pull and Run Containers
+      - name: Deploy Application
+        run: |
+          docker pull ${{ secrets.DOCKER_USERNAME }}/food_contamination_backend:latest
+          docker pull ${{ secrets.DOCKER_USERNAME }}/food_contamination_frontend:latest
+          docker-compose up -d
 

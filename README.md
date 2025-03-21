@@ -69,7 +69,7 @@ uvicorn main:app --host 0.0.0.0 --port 8000
 streamlit run app.py
 ```
 
-The application will be available at `http://localhost:8000/`.
+The application will be available at `http://localhost:8501/`.
 
 ## Usage
 1. Open the Streamlit web application.
@@ -115,10 +115,11 @@ curl -X 'POST' \
 To deploy the application using Docker:
 1. Ensure Docker is installed.
 2. Run `docker-compose up --build`
-3. Access the frontend at `http://localhost:8000/`
+3. Access the frontend at `http://localhost:8501/`
+4.Access the backend at `http://localhost:8000/`
 
 ## Contributors
-- **Your Name** - [GitHub Profile](https://github.com/ka1817)
+- **Your Name** - Katta Sai Pranav Reddy
 
 ## License
 This project is licensed under the MIT License.
